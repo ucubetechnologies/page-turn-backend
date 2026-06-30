@@ -17,5 +17,6 @@ public class AuthResponse {
     private String avatarUrl;
     private String bio;
     private LocalDate joinedDate;
+    private String token;
     private String message;
 }

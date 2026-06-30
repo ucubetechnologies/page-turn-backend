@@ -1,5 +1,6 @@
 package com.pageturn.service;
 
+import com.pageturn.config.JwtUtil;
 import com.pageturn.dto.AuthResponse;
 import com.pageturn.dto.LoginRequest;
 import com.pageturn.dto.UserRequest;
@@ -18,6 +19,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
@@ -50,6 +52,7 @@ public class AuthService {
     }
 
     private AuthResponse toResponse(User user, String message) {
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
         return AuthResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -58,6 +61,7 @@ public class AuthService {
                 .avatarUrl(user.getAvatarUrl())
                 .bio(user.getBio())
                 .joinedDate(user.getJoinedDate())
+                .token(token)
                 .message(message)
                 .build();
     }
